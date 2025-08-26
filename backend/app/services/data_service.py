@@ -82,14 +82,17 @@ def generate_basic_stats(df: pd.DataFrame) -> Dict[str, Any]:
     for column in df.columns:
         col_stats = {
             'data_type': str(df[column].dtype),
-            'non_null_count': df[column].count(),
-            'null_count': df[column].isnull().sum(),
-            'unique_values': df[column].nunique()
+            'non_null_count': int[column].count(),
+            'null_count': int[column].isnull().sum(),
+            'unique_values': int[column].nunique()
         }
         
         # Para colunas numéricas
         if pd.api.types.is_numeric_dtype(df[column]):
-            col_stats.update({
+
+            #Verificação para evitar erros em colunas vazias
+            if not df[column].dropna().empty:
+                col_stats.update({
                 'min': float(df[column].min()),
                 'max': float(df[column].max()),
                 'mean': float(df[column].mean()),
@@ -98,7 +101,9 @@ def generate_basic_stats(df: pd.DataFrame) -> Dict[str, Any]:
         
         # Para colunas de texto/categóricas
         if pd.api.types.is_string_dtype(df[column]) or pd.api.types.is_object_dtype(df[column]):
-            top_values = df[column].value_counts().head(5).to_dict()
+            top_values_series = df[column].value_counts().head(5)
+            
+            top_values = {str(key): int(value) for key, value in top_values_series.items()}
             col_stats['top_values'] = top_values
         
         stats[column] = col_stats
