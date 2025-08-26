@@ -1,0 +1,22 @@
+*.csv
+*.zip
+
+# Dados
+data/raw/
+data/processed/
+backend/app/static/uploads/
+
+# Ambiente Virtual
+venv/
+env/
+.venv/
+
+# Arquivos do sistema e IDE
+.DS_Store
+__pycache__/
+*.pyc
+.vscode/
+.idea/
+
+# Logs
+*.log
